@@ -17,9 +17,12 @@
       "js"
     ]
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "ts-node": "^7.0.1"
+  },
   "scripts": {
-    "test": "tsc --noEmit -p . && jest --no-cache"
+    "test": "tsc --noEmit -p . && jest --no-cache",
+    "run": "ts-node run.ts"
   },
   "repository": {
     "type": "git",
