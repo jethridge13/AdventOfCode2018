@@ -9,6 +9,34 @@ class Test {
 
 class Helper {
 
+	getCharCount(word: string): Map<string, number> {
+		const chars = new Map<string, number>();
+		for (const char of word) {
+			let currentCount = chars.get(char);
+			if (currentCount === undefined) {
+				currentCount = 0;
+			}
+			chars.set(char, currentCount + 1);
+		}
+		return chars;
+	}
+
+	/**
+	 *	Returns a list of indices of differing characters
+	 */
+	getDifferingCharacters(str1: string, str2: string): number[] {
+		if (str1.length !== str2.length) {
+			throw new Error('This method is designed for use with strings of equal length');
+		}
+		const chars: number[] = [];
+		Array.from(str1).forEach((char, index) => {
+			if (char !== str2[index]) {
+				chars.push(index);
+			}
+		});
+		return chars;
+	}
+
 	loadFileSync(path: string): string {
 		return fs.readFileSync(path, 'utf8');
 	}
@@ -51,8 +79,55 @@ class Day1 {
 	}
 }
 
+class Day2 {
+
+	private helper = new Helper();
+
+	part1(): number {
+		// 7776
+		const data = this.helper.loadFileSync('Day2.txt');
+		const lines = data.split('\n');
+		let doubleChars = 0;
+		let tripleChars = 0;
+		for (const line of lines) {
+			const chars = this.helper.getCharCount(line);
+			const values = Array.from(chars.values());
+			if (values.includes(2)) {
+				doubleChars += 1;
+			}
+			if (values.includes(3)) {
+				tripleChars += 1;
+			}
+		}
+		return doubleChars * tripleChars;
+	}
+
+	part2(): string {
+		const data = this.helper.loadFileSync('Day2.txt');
+		const lines = data.split('\n');
+		let id = '';
+		let index = 0;
+		for (const line of lines) {
+			for (const innerLine of lines) {
+				if (line === innerLine) {
+					continue;
+				}
+				const differingChars = this.helper.getDifferingCharacters(line, innerLine);
+				if (differingChars.length === 1) {
+					index = differingChars[0];
+					id = line;
+					break;
+				}
+			}
+		}
+		return id.slice(0, index) + id.slice(index + 1);
+	}
+
+}
+
 export {
 	Test,
 	Helper,
-	Day1
+	Day1,
+	Day2
 }
