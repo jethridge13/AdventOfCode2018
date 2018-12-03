@@ -41,6 +41,18 @@ class Helper {
 		return fs.readFileSync(path, 'utf8');
 	}
 
+	loadFileLinesSync(path: string): string[] {
+		const data = this.loadFileSync(path);
+		return data.split('\n');
+	}
+
+	*loadFileSyncGenerator(path: string): IterableIterator<string> {
+		const lines = this.loadFileLinesSync(path);
+		for (const line of lines) {
+			yield line;
+		}
+	}
+
 	parseIntWithSign(str: string): number {
 		return Number(str);
 	}
@@ -103,6 +115,7 @@ class Day2 {
 	}
 
 	part2(): string {
+		// wlkigsqyfecjqqmnxaktdrhbz
 		const data = this.helper.loadFileSync('Day2.txt');
 		const lines = data.split('\n');
 		let id = '';
