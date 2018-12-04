@@ -168,15 +168,32 @@ class Day3 {
 	}
 
 	part1() {
+		// 119572
 		const help = new Helper();
 		const lineGenerator = help.loadFileSyncGenerator('Day3.txt');
 		let curLine = lineGenerator.next();
-		const sets: number[][][] = [];
+		const coordsMap = new Map<string, number>();
 		while (!curLine.done) {
 			let parts = this.parseClaim(curLine.value);
-			sets.push(this.getClaimedArea(parts));
+			let set = this.getClaimedArea(parts);
+			set.forEach((coords) => {
+				const coordsSet = coords.toString();
+				let setCount = coordsMap.get(coordsSet);
+				if (setCount === undefined) {
+					setCount = 0;
+				}
+				setCount += 1;
+				coordsMap.set(coordsSet, setCount);
+			});
 			curLine = lineGenerator.next();
 		}
+		let dupCount = 0;
+		Array.from(coordsMap.values()).forEach(count => {
+			if (count > 1) {
+				dupCount += 1;
+			}
+		});
+		return dupCount;
 	}
 
 	part2() {

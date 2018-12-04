@@ -79,4 +79,8 @@ describe('Day 3', () => {
 		expect(area).not.toContainEqual([3,1]);
 		expect(area).not.toContainEqual([2,2]);
 	});
+
+	it('Part 1 answer equals 119572', () => {
+		expect(day3.part1()).toEqual(119572);
+	});
 });
