@@ -1,5 +1,5 @@
 import { Test, Helper } from './main'
-import { Day1, Day2 } from './main'
+import { Day1, Day2, Day3 } from './main'
 
 describe('Basic tests', () => {
 	it('Module is able to export basic class function', () => {
@@ -59,5 +59,24 @@ describe('Day 2', () => {
 
 	it('Part 2 answer equals wlkigsqyfecjqqmnxaktdrhbz', () => {
 		expect(day2.part2()).toEqual('wlkigsqyfecjqqmnxaktdrhbz');
+	});
+});
+
+describe('Day 3', () => {
+	const day3 = new Day3();
+	const parts = day3.parseClaim('#123 @ 3,2: 5x4');
+	it('parseClaim works as intended', () => {
+		expect(parts.id).toEqual('123');
+		expect(parts.start).toEqual('3,2');
+		expect(parts.size).toEqual('5x4');
+	});
+
+	it('getClaimedArea works as intended', () => {
+		const area = day3.getClaimedArea(parts);
+		expect(area).toContainEqual([3,2]);
+		expect(area).toContainEqual([3,3]);
+		expect(area).toContainEqual([7,5]);
+		expect(area).not.toContainEqual([3,1]);
+		expect(area).not.toContainEqual([2,2]);
 	});
 });

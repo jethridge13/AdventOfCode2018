@@ -138,9 +138,56 @@ class Day2 {
 
 }
 
+class Day3 {
+
+	parseClaim(line: string): {id: string; start: string; size: string;} {
+		const parts = line.split(' ');
+		const id = parts[0].slice(1);
+		const start = parts[2].slice(0, parts[2].length - 1);
+		const size = parts[3];
+		return {id, start, size};
+	}
+
+	getClaimedArea(parts: {id: string; start: string; size: string;}): number[][] {
+		const startCoords = parts.start.split(',');
+		const startX = parseInt(startCoords[0]);
+		const startY = parseInt(startCoords[1]);
+
+		const size = parts.size.split('x');
+		const sizeX = parseInt(size[0]);
+		const sizeY = parseInt(size[1]);
+
+		const claims: number[][] = [];
+		for (let i = startX; i < startX + sizeX; i++) {
+			for (let j = startY; j < startY + sizeY; j++) {
+				const coords = [i, j];
+				claims.push(coords);
+			}
+		}
+		return claims;
+	}
+
+	part1() {
+		const help = new Helper();
+		const lineGenerator = help.loadFileSyncGenerator('Day3.txt');
+		let curLine = lineGenerator.next();
+		const sets: number[][][] = [];
+		while (!curLine.done) {
+			let parts = this.parseClaim(curLine.value);
+			sets.push(this.getClaimedArea(parts));
+			curLine = lineGenerator.next();
+		}
+	}
+
+	part2() {
+
+	}
+}
+
 export {
 	Test,
 	Helper,
 	Day1,
-	Day2
+	Day2,
+	Day3
 }
