@@ -167,7 +167,7 @@ class Day3 {
 		return claims;
 	}
 
-	part1() {
+	part1(): number {
 		// 119572
 		const help = new Helper();
 		const lineGenerator = help.loadFileSyncGenerator('Day3.txt');
@@ -196,6 +196,49 @@ class Day3 {
 		return dupCount;
 	}
 
+	part2(): string {
+		const help = new Helper();
+		const lineGenerator = help.loadFileSyncGenerator('Day3.txt');
+		let curLine = lineGenerator.next();
+		while (!curLine.done) {
+			let parts = this.parseClaim(curLine.value);
+			let set = this.getClaimedArea(parts);
+			console.log(set);
+			curLine = lineGenerator.next();
+		}
+
+		return '';
+	}
+}
+
+class Day4 {
+	help = new Helper();
+
+	parseInstruction(line: string): {date: string, time: string, info: string} {
+		const timestamp = line.slice(line.indexOf('[')+1, line.indexOf(']')).split(' ');
+		const date = timestamp[0];
+		const time = timestamp[1];
+		if (line.includes('falls asleep')) {
+			return {date, time, info: 'sleep'};
+		} else if (line.includes('wakes up')) {
+			return {date, time, info: 'wake'};
+		}
+		line = line.slice(line.indexOf(']'));
+		return {date, time, info: line.split(' ')[2].slice(1)};
+	}
+
+	part1() {
+		const data = this.help.loadFileLinesSync('Day4.txt').sort();
+		let currentGuard = 0;
+		data.forEach(line => {
+			let ins = this.parseInstruction(line);
+			if (Number(ins.info) !== NaN) {
+				currentGuard = Number(ins.info);
+
+			}
+		});
+	}
+
 	part2() {
 
 	}
@@ -206,5 +249,6 @@ export {
 	Helper,
 	Day1,
 	Day2,
-	Day3
+	Day3,
+	Day4
 }

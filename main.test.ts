@@ -1,5 +1,5 @@
 import { Test, Helper } from './main'
-import { Day1, Day2, Day3 } from './main'
+import { Day1, Day2, Day3, Day4 } from './main'
 
 describe('Basic tests', () => {
 	it('Module is able to export basic class function', () => {
@@ -82,5 +82,27 @@ describe('Day 3', () => {
 
 	it('Part 1 answer equals 119572', () => {
 		expect(day3.part1()).toEqual(119572);
+	});
+});
+
+describe('Day 4', () => {
+	const day4 = new Day4();
+	it('parseInstruction works for guard number', () => {
+		const insObj = day4.parseInstruction('[1518-11-01 00:00] Guard #10 begins shift');
+		expect(insObj.date).toEqual('1518-11-01');
+		expect(insObj.time).toEqual('00:00');
+		expect(insObj.info).toEqual('10');
+	});
+	it('parseInstruction works for sleep', () => {
+		const insObj = day4.parseInstruction('[1518-11-01 00:05] falls asleep');
+		expect(insObj.date).toEqual('1518-11-01');
+		expect(insObj.time).toEqual('00:05');
+		expect(insObj.info).toEqual('sleep');
+	});
+	it('parseInstruction works for wake', () => {
+		const insObj = day4.parseInstruction('[1518-11-01 00:25] wakes up');
+		expect(insObj.date).toEqual('1518-11-01');
+		expect(insObj.time).toEqual('00:25');
+		expect(insObj.info).toEqual('wake');
 	});
 });
