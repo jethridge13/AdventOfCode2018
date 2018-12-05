@@ -230,13 +230,33 @@ class Day4 {
 	part1() {
 		const data = this.help.loadFileLinesSync('Day4.txt').sort();
 		let currentGuard = 0;
-		data.forEach(line => {
+		const guardShifts: object[] = [];
+		let currentShift: {id: number; ranges: {min:number; max:number;}[]} = {id: 0, ranges: []};
+		let min = -1;
+		let max = -1;
+		for (const line of data) {
 			let ins = this.parseInstruction(line);
 			if (Number(ins.info) !== NaN) {
+				if (min > 0) {
+					currentShift.ranges.push({min, max: 60});
+					min = -1;
+					max = -1;
+				}
+				console.log(currentShift);
+				guardShifts.push(currentShift);
+				currentShift = {id: 0, ranges: []};
 				currentGuard = Number(ins.info);
-
+				currentShift.id = currentGuard;
+			} else if (ins.info === 'sleep') {
+				min = Number(ins.time.split(':')[1]);
+			} else {
+				max = Number(ins.time.split(':')[1]);
+				currentShift.ranges.push({min, max})
+				min = -1;
+				max = -1;
 			}
-		});
+		}
+		//console.log(guardShifts);
 	}
 
 	part2() {
