@@ -211,6 +211,14 @@ class Day3 {
 	}
 }
 
+interface GuardShift {
+	id: number;
+	ranges: {
+		min: number;
+		max: number;
+	}[]
+}
+
 class Day4 {
 	help = new Helper();
 
@@ -227,7 +235,7 @@ class Day4 {
 		return {date, time, info: line.split(' ')[2].slice(1)};
 	}
 
-	getGuardWithMostHoursSlept(guardShifts: {id: number; ranges: {min:number; max:number;}[]}[]): number {
+	getGuardWithMostHoursSlept(guardShifts: GuardShift[]): number {
 		const guards = new Map<number, number>();
 		for (const guard of guardShifts) {
 			let minutesSlept = 0;
@@ -253,11 +261,11 @@ class Day4 {
 	}
 
 	part1() {
-		// TODO Create a reusable object class instead of declaring it each time
+		// 142515
 		const data = this.help.loadFileLinesSync('Day4.txt').sort();
 		let currentGuard = 0;
-		const guardShifts: {id: number; ranges: {min:number; max:number;}[]}[] = [];
-		let currentShift: {id: number; ranges: {min:number; max:number;}[]} = {id: 0, ranges: []};
+		const guardShifts: GuardShift[] = [];
+		let currentShift: GuardShift = {id: 0, ranges: []};
 		let min = -1;
 		let max = -1;
 		for (const line of data) {
@@ -283,7 +291,30 @@ class Day4 {
 		}
 
 		const guardWithMostHoursSlept = this.getGuardWithMostHoursSlept(guardShifts);
-		
+		const shifts: GuardShift[] = [];
+		for (const shift of guardShifts) {
+			if (shift.id === guardWithMostHoursSlept) {
+				shifts.push(shift);
+			}
+		}
+		const minutes: number[] = new Array(60).fill(0);
+		for (const shift of shifts) {
+			for (const range of shift.ranges) {
+				for (let i = range.min; i < range.max; i++) {
+					minutes[i]++;
+				}
+			}
+		}
+
+		let maxIndex = -1;
+		let maxFreq = -1;
+		minutes.forEach((freq, index) => {
+			if (freq > maxFreq) {
+				maxFreq = freq;
+				maxIndex = index;
+			}
+		});
+		return guardWithMostHoursSlept * maxIndex;
 	}
 
 	part2() {

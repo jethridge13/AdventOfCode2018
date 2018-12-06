@@ -105,4 +105,8 @@ describe('Day 4', () => {
 		expect(insObj.time).toEqual('00:25');
 		expect(insObj.info).toEqual('wake');
 	});
+
+	it('Part 1 answer equals 142515', () => {
+		expect(day4.part1()).toEqual(142515);
+	})
 });
