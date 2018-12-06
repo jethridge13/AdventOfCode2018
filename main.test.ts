@@ -1,5 +1,5 @@
 import { Test, Helper } from './main'
-import { Day1, Day2, Day3, Day4 } from './main'
+import { Day1, Day2, Day3, Day4, Day5 } from './main'
 
 describe('Basic tests', () => {
 	it('Module is able to export basic class function', () => {
@@ -109,4 +109,24 @@ describe('Day 4', () => {
 	it('Part 1 answer equals 142515', () => {
 		expect(day4.part1()).toEqual(142515);
 	})
+});
+
+describe('Day 5', () => {
+	const day5 = new Day5();
+	it('reduceString works as intended', () => {
+		expect(day5.reduceString('dabAcCaCBAcCcaDA')).toEqual('dabCBAcaDA');
+	});
+
+	it('getReversedPolarity works as intended', () => {
+		expect(day5.getReversedPolarity('c')).toEqual('C');
+		expect(day5.getReversedPolarity('C')).toEqual('c');
+		expect(day5.getReversedPolarity('a')).toEqual('A');
+		expect(day5.getReversedPolarity('z')).toEqual('Z');
+		expect(day5.getReversedPolarity('A')).toEqual('a');
+		expect(day5.getReversedPolarity('Z')).toEqual('z');
+	});
+
+	it('Part 1 answer equals 10180', () => {
+		expect(day5.part1()).toEqual(10180);
+	});
 });

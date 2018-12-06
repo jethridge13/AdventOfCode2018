@@ -322,11 +322,51 @@ class Day4 {
 	}
 }
 
+class Day5 {
+
+	help = new Helper();
+
+	getReversedPolarity(char: string): string {
+		let asciiCode = char.charCodeAt(0);
+		if (asciiCode >= 97 && asciiCode <= 122) {
+			asciiCode -= 32;
+		} else if (asciiCode >= 65 && asciiCode <= 90) {
+			asciiCode += 32;
+		}
+		return String.fromCharCode(asciiCode);
+	}
+
+	reduceString(data: string): string {
+		for (let i = 0; i < data.length - 1; i++) {
+			if (data[i+1] === this.getReversedPolarity(data[i])) {
+				data = data.slice(0, i) + data.slice(i + 2);
+				i -= 2;
+				if (i < 0) {
+					i = -1;
+				}
+			}
+		}
+		return data;
+	}
+
+	part1() {
+		// 10180
+		const data = this.help.loadFileSync('Day5.txt');
+		console.log(this.reduceString(data));
+		return this.reduceString(data).length;
+	}
+
+	part2() {
+
+	}
+}
+
 export {
 	Test,
 	Helper,
 	Day1,
 	Day2,
 	Day3,
-	Day4
+	Day4,
+	Day5
 }
