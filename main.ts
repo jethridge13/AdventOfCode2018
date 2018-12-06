@@ -227,36 +227,63 @@ class Day4 {
 		return {date, time, info: line.split(' ')[2].slice(1)};
 	}
 
+	getGuardWithMostHoursSlept(guardShifts: {id: number; ranges: {min:number; max:number;}[]}[]): number {
+		const guards = new Map<number, number>();
+		for (const guard of guardShifts) {
+			let minutesSlept = 0;
+			for (const range of guard.ranges) {
+				minutesSlept += range.max - range.min;
+			}
+			let minutes = guards.get(guard.id);
+			if (minutes === undefined) {
+				minutes = 0;
+			}
+			guards.set(guard.id, minutes + minutesSlept);
+		}
+		let sleepiestGuard = -1;
+		let mostMinutesSlept = 0;
+		for (const key of guards.keys()) {
+			const minutes = guards.get(key);
+			if (minutes !== undefined && minutes > mostMinutesSlept) {
+				mostMinutesSlept = minutes;
+				sleepiestGuard = key;
+			}
+		}
+		return sleepiestGuard;
+	}
+
 	part1() {
+		// TODO Create a reusable object class instead of declaring it each time
 		const data = this.help.loadFileLinesSync('Day4.txt').sort();
 		let currentGuard = 0;
-		const guardShifts: object[] = [];
+		const guardShifts: {id: number; ranges: {min:number; max:number;}[]}[] = [];
 		let currentShift: {id: number; ranges: {min:number; max:number;}[]} = {id: 0, ranges: []};
 		let min = -1;
 		let max = -1;
 		for (const line of data) {
 			let ins = this.parseInstruction(line);
-			if (Number(ins.info) !== NaN) {
+			if (ins.info === 'wake') {
+				max = Number(ins.time.split(':')[1]);
+				currentShift.ranges.push({min, max})
+				min = -1;
+				max = -1;
+			} else if (ins.info === 'sleep') {
+				min = Number(ins.time.split(':')[1]);
+			} else {
 				if (min > 0) {
 					currentShift.ranges.push({min, max: 60});
 					min = -1;
 					max = -1;
 				}
-				console.log(currentShift);
 				guardShifts.push(currentShift);
 				currentShift = {id: 0, ranges: []};
 				currentGuard = Number(ins.info);
 				currentShift.id = currentGuard;
-			} else if (ins.info === 'sleep') {
-				min = Number(ins.time.split(':')[1]);
-			} else {
-				max = Number(ins.time.split(':')[1]);
-				currentShift.ranges.push({min, max})
-				min = -1;
-				max = -1;
 			}
 		}
-		//console.log(guardShifts);
+
+		const guardWithMostHoursSlept = this.getGuardWithMostHoursSlept(guardShifts);
+		
 	}
 
 	part2() {
