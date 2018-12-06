@@ -349,15 +349,33 @@ class Day5 {
 		return data;
 	}
 
+	parseString(data: string): string {
+		let shortestLength = Number.MAX_SAFE_INTEGER;
+		let shortestString = '';
+		for (let i = 0; i < 26; i++) {
+			let lowerCase = String.fromCharCode(65 + i);
+			let upperCase = String.fromCharCode(97 + i);
+			let parsedData = data.replace(new RegExp(lowerCase, 'g'), '')
+			.replace(new RegExp(upperCase, 'g'), '');
+			let reducedData = this.reduceString(parsedData);
+			if (reducedData.length < shortestLength) {
+				shortestLength = reducedData.length;
+				shortestString = reducedData;
+			}
+		}
+		return shortestString;
+	}
+
 	part1() {
 		// 10180
 		const data = this.help.loadFileSync('Day5.txt');
-		console.log(this.reduceString(data));
 		return this.reduceString(data).length;
 	}
 
 	part2() {
-
+		// 5668
+		const data = this.help.loadFileSync('Day5.txt');
+		return this.parseString(data).length;
 	}
 }
 

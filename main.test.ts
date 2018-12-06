@@ -117,6 +117,10 @@ describe('Day 5', () => {
 		expect(day5.reduceString('dabAcCaCBAcCcaDA')).toEqual('dabCBAcaDA');
 	});
 
+	it('parseString works as intended', () => {
+		expect(day5.parseString('dabAcCaCBAcCcaDA')).toEqual('daDA');
+	})
+
 	it('getReversedPolarity works as intended', () => {
 		expect(day5.getReversedPolarity('c')).toEqual('C');
 		expect(day5.getReversedPolarity('C')).toEqual('c');
@@ -128,5 +132,9 @@ describe('Day 5', () => {
 
 	it('Part 1 answer equals 10180', () => {
 		expect(day5.part1()).toEqual(10180);
+	});
+
+	it('Part 2 answer equals 5668', () => {
+		expect(day5.part2()).toEqual(5668);
 	});
 });
