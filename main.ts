@@ -400,6 +400,33 @@ interface Point {
 class Day6 {
 	help = new Helper();
 
+	fillBoard(board: string[][], points: Point[]): string[][] {
+		while (points.length > 0) {
+			const newPoints = new Map<Point, string>();
+			for(const point of points) {
+				let pointChar = board[point.y][point.x];
+				// TODO Assign char to points;
+			}
+			points = Array.from(newPoints.keys());
+		}
+		return board;
+	}
+
+	getBoardFreq(board: string[][]): Map<string, number> {
+		const freqMap = new Map<string, number>();
+		for (const row of board) {
+			for (const item of row) {
+				let freq = freqMap.get(item);
+				if (freq === undefined) {
+					freq = 0;
+				}
+				freqMap.set(item, freq + 1);
+			}
+		}
+
+		return freqMap;
+	}
+
 	part1() {
 		const lineGenerator = this.help.loadFileSyncGenerator('Day6.txt');
 		let curLine = lineGenerator.next();
@@ -423,14 +450,22 @@ class Day6 {
 		}
 		const board: string[][] = []
 		for (let i = 0; i < maxX; i++) {
-			let array = new Array(maxY).fill('.');
+			let array = new Array(maxY).fill('?');
 			board.push(array);
 		}
 
+		let asciiCharCode = 65;
 		for (const point of points) {
-			board[point.y][point.x] = 'X';
+			board[point.y][point.x] = String.fromCharCode(asciiCharCode);
+			asciiCharCode++;
+			if (asciiCharCode > 90) {
+				asciiCharCode = 97;
+			}
 		}
 
+		const filledBoard = this.fillBoard(board, points);
+		const gridMap = this.getBoardFreq(filledBoard);
+		return Math.max(...gridMap.values());
 	}
 
 	part2() {
