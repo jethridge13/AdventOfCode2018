@@ -37,6 +37,10 @@ class Helper {
 		return chars;
 	}
 
+	getManhattanDistance(a: Point, b: Point): number {
+		return Math.abs(a.x - b.x) + Math.abs(a.y - b.y);
+	}
+
 	loadFileSync(path: string): string {
 		return fs.readFileSync(path, 'utf8');
 	}
@@ -55,6 +59,15 @@ class Helper {
 
 	parseIntWithSign(str: string): number {
 		return Number(str);
+	}
+
+	printGrid(array: any[][]): void {
+		for (const row of array) {
+			for(const item of row) {
+				process.stdout.write(item);
+			}
+			process.stdout.write('\n');
+		}
 	}
 }
 
@@ -379,6 +392,52 @@ class Day5 {
 	}
 }
 
+interface Point {
+	x: number;
+	y: number;
+}
+
+class Day6 {
+	help = new Helper();
+
+	part1() {
+		const lineGenerator = this.help.loadFileSyncGenerator('Day6.txt');
+		let curLine = lineGenerator.next();
+		const points: Point[] = [];
+		let maxX = 0;
+		let maxY = 0;
+		while (!curLine.done) {
+			let x = Number(curLine.value.split(', ')[0]);
+			let y = Number(curLine.value.split(', ')[1]);
+			const newPoint: Point = {x, y};
+			points.push(newPoint);
+
+			if (x > maxX) {
+				maxX = x;
+			}
+			if (y > maxY) {
+				maxY = y;
+			}
+
+			curLine = lineGenerator.next();
+		}
+		const board: string[][] = []
+		for (let i = 0; i < maxX; i++) {
+			let array = new Array(maxY).fill('.');
+			board.push(array);
+		}
+
+		for (const point of points) {
+			board[point.y][point.x] = 'X';
+		}
+
+	}
+
+	part2() {
+
+	}
+}
+
 export {
 	Test,
 	Helper,
@@ -386,5 +445,6 @@ export {
 	Day2,
 	Day3,
 	Day4,
-	Day5
+	Day5,
+	Day6
 }
