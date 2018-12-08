@@ -405,7 +405,27 @@ class Day6 {
 			const newPoints = new Map<Point, string>();
 			for(const point of points) {
 				let pointChar = board[point.y][point.x];
-				// TODO Assign char to points;
+				if (pointChar === '.') {
+					continue;
+				}
+				let pointsToCheck: Point[] = [];
+				pointsToCheck.push({x: point.x + 1, y: point.y});
+				pointsToCheck.push({x: point.x - 1, y: point.y});
+				pointsToCheck.push({x: point.x, y: point.y + 1});
+				pointsToCheck.push({x: point.x, y: point.y - 1});
+
+				for (const p of pointsToCheck) {
+					if (board[p.y] !== undefined
+						&& board[p.y][p.x] !== undefined) {
+						if (newPoints.get(p) === undefined) {
+							board[p.y][p.x] = pointChar;
+							newPoints.set(p, pointChar);
+						} else {
+							board[p.y][p.x] = '.';
+							newPoints.set(p, '.');
+						}
+					}
+				}
 			}
 			points = Array.from(newPoints.keys());
 		}
@@ -464,6 +484,7 @@ class Day6 {
 		}
 
 		const filledBoard = this.fillBoard(board, points);
+		this.help.printGrid(filledBoard);
 		const gridMap = this.getBoardFreq(filledBoard);
 		return Math.max(...gridMap.values());
 	}
