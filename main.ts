@@ -494,6 +494,44 @@ class Day6 {
 	}
 }
 
+interface Dep {
+	name: string;
+	dependsOn: string[];
+}
+
+class Day7 {
+
+	help = new Helper();
+
+	parseNode(line: string): {name: string, dependsOn: string} {
+		const parts = line.split(' ');
+		const name = parts[7];
+		const dependsOn = parts[1]
+		return {name, dependsOn};
+	}
+
+	part1() {
+		const lineGenerator = this.help.loadFileSyncGenerator('Day7.txt');
+		let curLine = lineGenerator.next();
+		const depMap = new Map<string, Dep>();
+		while (!curLine.done) {
+			let parts = this.parseNode(curLine.value);
+			let node: Dep | undefined = depMap.get(parts.name);
+			if (node === undefined) {
+				node = {name: parts.name, dependsOn: []};
+			}
+			node.dependsOn.push(parts.dependsOn);
+			depMap.set(parts.name, node);
+			curLine = lineGenerator.next();
+		}
+		
+	}
+
+	part2() {
+
+	}
+}
+
 export {
 	Test,
 	Helper,
@@ -502,5 +540,6 @@ export {
 	Day3,
 	Day4,
 	Day5,
-	Day6
+	Day6,
+	Day7
 }

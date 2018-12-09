@@ -1,5 +1,5 @@
 import { Test, Helper } from './main'
-import { Day1, Day2, Day3, Day4, Day5 } from './main'
+import { Day1, Day2, Day3, Day4, Day5, Day7 } from './main'
 
 describe('Basic tests', () => {
 	it('Module is able to export basic class function', () => {
@@ -136,5 +136,13 @@ describe('Day 5', () => {
 
 	it('Part 2 answer equals 5668', () => {
 		expect(day5.part2()).toEqual(5668);
+	});
+});
+
+describe('Day 7', () => {
+	const day7 = new Day7();
+	it('parseNode works as intended', () => {
+		expect(day7.parseNode('Step C must be finished before step A can begin.'))
+		.toEqual({name: 'A', dependsOn: 'C'});
 	});
 });
