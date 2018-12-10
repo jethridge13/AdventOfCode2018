@@ -3,6 +3,8 @@
         "target": "es2017",
         "module": "commonjs",
         "alwaysStrict": true,
+        "moduleResolution": "node",
+        "module": "commonjs",
         "noUnusedLocals": true,
         "noUnusedParameters": true,
         "noImplicitAny": true,

@@ -1,4 +1,5 @@
 import fs = require('fs');
+const DepGraph = require('dependency-graph').DepGraph;
 
 class Test {
 
@@ -494,11 +495,6 @@ class Day6 {
 	}
 }
 
-interface Dep {
-	name: string;
-	dependsOn: string[];
-}
-
 class Day7 {
 
 	help = new Helper();
@@ -511,20 +507,22 @@ class Day7 {
 	}
 
 	part1() {
+		// NOT FOXCGRMUIKAZHYTJDNESWLPQBV
 		const lineGenerator = this.help.loadFileSyncGenerator('Day7.txt');
 		let curLine = lineGenerator.next();
-		const depMap = new Map<string, Dep>();
+		const graph = new DepGraph();
 		while (!curLine.done) {
 			let parts = this.parseNode(curLine.value);
-			let node: Dep | undefined = depMap.get(parts.name);
-			if (node === undefined) {
-				node = {name: parts.name, dependsOn: []};
+			if (!graph.hasNode(parts.name)) {
+				graph.addNode(parts.name);
 			}
-			node.dependsOn.push(parts.dependsOn);
-			depMap.set(parts.name, node);
+			if (!graph.hasNode(parts.dependsOn)) {
+				graph.addNode(parts.dependsOn);
+			}
+			graph.addDependency(parts.name, parts.dependsOn);
 			curLine = lineGenerator.next();
 		}
-		
+		return graph.overallOrder().join('');
 	}
 
 	part2() {
