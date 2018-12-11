@@ -568,14 +568,28 @@ class Day10 {
 		};
 	}
 
-	part1(time=0) {
+	part1() {
 		const lines = this.help.loadFileLinesSync('Day10.txt');
 		const pts: Day10Pt[] = [];
 		for (const line of lines) {
 			pts.push(this.parseLine(line));
 		}
 
-		
+		// Magic numbers, WOOT!
+		const time = 10305;
+		const dim = 210;
+		const array: string[][] = new Array(dim).fill(new Array(dim));
+		for (const a of array) {
+			a.fill('.');
+		}
+		for (const pt of pts) {
+			const x = pt.position.x + pt.velocity.x * time;
+			const y = pt.position.y + pt.velocity.y * time;
+			//console.log(x, y);
+			array[y][x] = '*';
+		}
+
+		this.help.printGrid(array);
 	}
 
 	part2() {
