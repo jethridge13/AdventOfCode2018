@@ -530,6 +530,59 @@ class Day7 {
 	}
 }
 
+interface Day10Pt {
+	position: {
+		x: number;
+		y: number;
+	};
+	velocity: {
+		x: number;
+		y: number;
+	};
+}
+
+class Day10 {
+
+	help = new Helper();
+
+	parseLine(line: string): Day10Pt {
+		const parts = line.split('<');
+		let posLine = parts[1].split('>')[0];
+		let velLine = parts[2];
+
+		posLine = posLine.replace('<', '').replace('>', '');
+		velLine = velLine.replace('<', '').replace('>', '');
+
+		const posParts = posLine.split(', ');
+		const velParts = velLine.split(', ');
+
+		return {
+			position: {
+				x: Number(posParts[0]),
+				y: Number(posParts[1])
+			},
+			velocity: {
+				x: Number(velParts[0]),
+				y: Number(velParts[1])
+			}
+		};
+	}
+
+	part1(time=0) {
+		const lines = this.help.loadFileLinesSync('Day10.txt');
+		const pts: Day10Pt[] = [];
+		for (const line of lines) {
+			pts.push(this.parseLine(line));
+		}
+
+		
+	}
+
+	part2() {
+
+	}
+}
+
 export {
 	Test,
 	Helper,
@@ -539,5 +592,6 @@ export {
 	Day4,
 	Day5,
 	Day6,
-	Day7
+	Day7,
+	Day10
 }
