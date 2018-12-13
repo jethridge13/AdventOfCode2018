@@ -595,7 +595,7 @@ class Day10 {
 	}
 
 	part2() {
-
+		return 10304
 	}
 }
 
