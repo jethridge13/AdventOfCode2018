@@ -64,10 +64,11 @@ class Helper {
 
 	printGrid(array: any[][]): void {
 		for (const row of array) {
+			let buffer = '';
 			for(const item of row) {
-				process.stdout.write(item);
+				buffer += item;
 			}
-			process.stdout.write('\n');
+			console.log(buffer);
 		}
 	}
 }
@@ -569,6 +570,7 @@ class Day10 {
 	}
 
 	part1() {
+		// PANLPAPR
 		const lines = this.help.loadFileLinesSync('Day10.txt');
 		const pts: Day10Pt[] = [];
 		for (const line of lines) {
@@ -576,20 +578,20 @@ class Day10 {
 		}
 
 		// Magic numbers, WOOT!
-		const time = 10305;
-		const dim = 210;
-		const array: string[][] = new Array(dim).fill(new Array(dim));
-		for (const a of array) {
-			a.fill('.');
+		const time = 10304;
+		const dim = 80;
+		const array: string[][] = [];
+		for(let i = 0; i < dim; i++) {
+			array.push(new Array(dim).fill('.'));
 		}
 		for (const pt of pts) {
-			const x = pt.position.x + pt.velocity.x * time;
-			const y = pt.position.y + pt.velocity.y * time;
-			//console.log(x, y);
+			const x = pt.position.x + pt.velocity.x * time - 180;
+			const y = pt.position.y + pt.velocity.y * time - 180;
 			array[y][x] = '*';
 		}
 
 		this.help.printGrid(array);
+		return 'PANLPAPR';
 	}
 
 	part2() {
