@@ -599,6 +599,56 @@ class Day10 {
 	}
 }
 
+interface Cart {
+	x: number
+	y: number
+	curDir: string
+	lastTurn: string
+}
+
+class Day13 {
+
+	help = new Helper();
+	
+	findAllCarts(array: string[][]): Cart[] {
+		const carts = ['<', '>', 'v', '^'];
+		const points: Cart[] = [];
+		for (let x = 0; x < array.length; x++) {
+			for (let y = 0; y < array[x].length; y++) {
+				if (carts.indexOf(array[x][y]) > -1) {
+					points.push({x, y, curDir: array[x][y], lastTurn: ''});
+				}
+			}
+		}
+		return points;
+	}
+
+	sanitizeArray(array: string[][], carts: Cart[]) {
+		for (const cart of carts) {
+			if (cart.curDir === '<' || cart.curDir === '>') {
+				array[cart.x][cart.y] = '-';
+			} else if (cart.curDir === '^' || cart.curDir === 'v') {
+				array[cart.x][cart.y] = '|';
+			}
+		}
+		return array;
+	}
+
+	part1() {
+		let array: string[][] = [];
+		for (const line of this.help.loadFileLinesSync('Day13.txt')) {
+			array.push(line.split(''));
+		}
+		const carts = this.findAllCarts(array);
+		array = this.sanitizeArray(array, carts);
+
+	}
+
+	part2() {
+
+	}
+}
+
 export {
 	Test,
 	Helper,
@@ -609,5 +659,6 @@ export {
 	Day5,
 	Day6,
 	Day7,
-	Day10
+	Day10,
+	Day13
 }
