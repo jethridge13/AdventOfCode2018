@@ -616,6 +616,7 @@ class Day13 {
 		for (let x = 0; x < array.length; x++) {
 			for (let y = 0; y < array[x].length; y++) {
 				if (carts.indexOf(array[x][y]) > -1) {
+					console.log(array[x][y])
 					points.push({x, y, curDir: array[x][y], lastTurn: ''});
 				}
 			}
@@ -634,14 +635,178 @@ class Day13 {
 		return array;
 	}
 
+	checkForCollisions(carts: Cart[]): boolean {
+		const pointMap = new Map<Point, number>();
+		for (const cart of carts) {
+			const point = pointMap.get({x: cart.x, y: cart.y});
+			if (point !== undefined) {
+				return true;
+			}
+			pointMap.set({x: cart.x, y: cart.y}, 1);
+		}
+		return false;
+	}
+
+	updateCart(cart: Cart, array: string[][]): Cart {
+		let x = cart.x;
+		let y = cart.y;
+
+		switch (cart.curDir) {
+			case '^':
+				x -= 1;
+				break;
+			case 'v':
+				x += 1;
+				break;
+			case '<':
+				y -= 1;
+				break;
+			case '>':
+				y += 1;
+				break;
+		}
+
+		const path = array[x][y];
+		let newDir = cart.curDir;
+		let newTurn = cart.lastTurn;
+		switch (path) {
+			case '\\':
+				if (cart.curDir === '>') {
+					newDir = 'v';
+				} else if (cart.curDir === '^'){
+					newDir = '<';
+				} else if (cart.curDir === 'v'){
+					newDir = '>';
+				} else {
+					newDir = '^';
+				}
+				break;
+			case '/':
+				if (cart.curDir === '<') {
+					newDir = 'v';
+				} else if (cart.curDir === '^'){
+					newDir = '>';
+				} else if (cart.curDir === '>') {
+					newDir = '^';
+				} else {
+					newDir = '<';
+				}
+				break;
+			case '+':
+				switch (cart.lastTurn){
+					case '':
+					case 'r':
+						newDir = this.turnCart(cart.curDir, 'l');
+						newTurn = 'l';
+						break;
+					case 'l':
+						newDir = this.turnCart(cart.curDir, 's');
+						newTurn = 's';
+						break;
+					case 's':
+						newDir = this.turnCart(cart.curDir, 'r');
+						newTurn = 'r';
+						break;
+				}
+				break;
+		}
+
+		return {x, y, curDir: newDir, lastTurn: newTurn};
+	}
+
+	turnCart(curDir: string, turn: string): string {
+		let newDir = curDir;
+		switch(curDir) {
+			case '^':
+				switch(turn) {
+					case 'l':
+						newDir = '<'
+						break;
+					case 'r':
+						newDir = '>'
+						break;
+					case 's':
+						newDir = '^'
+						break;
+				}
+				break;
+			case '>':
+				switch(turn) {
+					case 'l':
+						newDir = '^'
+						break;
+					case 'r':
+						newDir = 'v'
+						break;
+					case 's':
+						newDir = '>'
+						break;
+				}
+				break;
+			case 'v':
+				switch(turn) {
+					case 'l':
+						newDir = '>'
+						break;
+					case 'r':
+						newDir = '<'
+						break;
+					case 's':
+						newDir = 'v'
+						break;
+				}
+				break;
+			case '<':
+				switch(turn) {
+					case 'l':
+						newDir = '^'
+						break;
+					case 'r':
+						newDir = 'v'
+						break;
+					case 's':
+						newDir = '<'
+						break;
+				}
+				break;
+		}
+
+		return newDir;
+	}
+
+	printArray(carts: Cart[], array: string[][]): void {
+		const newArray = array.slice();
+		carts.forEach(cart => {
+			newArray[cart.x][cart.y] = cart.curDir;
+		});
+		this.help.printGrid(newArray);
+	}
+
 	part1() {
 		let array: string[][] = [];
-		for (const line of this.help.loadFileLinesSync('Day13.txt')) {
+		for (const line of this.help.loadFileLinesSync('Day13Test.txt')) {
 			array.push(line.split(''));
 		}
-		const carts = this.findAllCarts(array);
+		let carts = this.findAllCarts(array);
 		array = this.sanitizeArray(array, carts);
 
+		let tick = 0;
+		while (true) {
+			let newCarts: Cart[] = [];
+			carts.forEach((cart) => {
+				const newCart = this.updateCart(cart, array);
+				newCarts.push(newCart);
+			});
+			carts = newCarts;
+			tick++;
+			if (this.checkForCollisions(carts)) {
+				break;
+			}
+			if (tick > 24) {
+				return tick;
+			}
+		}
+		return tick;
 	}
 
 	part2() {

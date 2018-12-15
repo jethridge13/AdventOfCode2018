@@ -1,5 +1,5 @@
 import { Test, Helper } from './main'
-import { Day1, Day2, Day3, Day4, Day5, Day7, Day10 } from './main'
+import { Day1, Day2, Day3, Day4, Day5, Day7, Day10, Day13 } from './main'
 
 describe('Basic tests', () => {
 	it('Module is able to export basic class function', () => {
@@ -155,3 +155,11 @@ describe('Day 10', () => {
 		.toEqual({position: {x: 9, y: 1}, velocity: {x: 0, y: 2}});
 	});
 });
+
+/*
+describe('Day 13', () => {
+	const day13 = new Day13();
+
+
+});
+*/
