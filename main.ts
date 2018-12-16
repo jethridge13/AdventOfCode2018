@@ -1,4 +1,5 @@
 import fs = require('fs');
+import HashMap from './HashMap';
 const DepGraph = require('dependency-graph').DepGraph;
 
 class Test {
@@ -607,6 +608,8 @@ interface Cart {
 }
 
 class Day13 {
+	// NOT 146,26
+	// NOT 26,146
 
 	help = new Helper();
 	
@@ -616,7 +619,6 @@ class Day13 {
 		for (let x = 0; x < array.length; x++) {
 			for (let y = 0; y < array[x].length; y++) {
 				if (carts.indexOf(array[x][y]) > -1) {
-					console.log(array[x][y])
 					points.push({x, y, curDir: array[x][y], lastTurn: ''});
 				}
 			}
@@ -635,16 +637,16 @@ class Day13 {
 		return array;
 	}
 
-	checkForCollisions(carts: Cart[]): boolean {
-		const pointMap = new Map<Point, number>();
+	checkForCollisions(carts: Cart[]): Point | null {
+		const pointMap = new HashMap();
 		for (const cart of carts) {
 			const point = pointMap.get({x: cart.x, y: cart.y});
 			if (point !== undefined) {
-				return true;
+				return {x: cart.y, y: cart.x};
 			}
 			pointMap.set({x: cart.x, y: cart.y}, 1);
 		}
-		return false;
+		return null;
 	}
 
 	updateCart(cart: Cart, array: string[][]): Cart {
@@ -775,7 +777,9 @@ class Day13 {
 	}
 
 	printArray(carts: Cart[], array: string[][]): void {
-		const newArray = array.slice();
+		const newArray = array.map(arr => {
+			return arr.slice();
+		});
 		carts.forEach(cart => {
 			newArray[cart.x][cart.y] = cart.curDir;
 		});
@@ -784,13 +788,12 @@ class Day13 {
 
 	part1() {
 		let array: string[][] = [];
-		for (const line of this.help.loadFileLinesSync('Day13Test.txt')) {
+		for (const line of this.help.loadFileLinesSync('Day13.txt')) {
 			array.push(line.split(''));
 		}
 		let carts = this.findAllCarts(array);
 		array = this.sanitizeArray(array, carts);
 
-		let tick = 0;
 		while (true) {
 			let newCarts: Cart[] = [];
 			carts.forEach((cart) => {
@@ -798,15 +801,14 @@ class Day13 {
 				newCarts.push(newCart);
 			});
 			carts = newCarts;
-			tick++;
-			if (this.checkForCollisions(carts)) {
+			const pt = this.checkForCollisions(carts);
+			if (pt !== null) {
+				return pt;
 				break;
 			}
-			if (tick > 24) {
-				return tick;
-			}
+			// this.printArray(carts, array);
 		}
-		return tick;
+		return undefined;
 	}
 
 	part2() {
