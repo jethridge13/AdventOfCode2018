@@ -788,12 +788,13 @@ class Day13 {
 
 	part1() {
 		let array: string[][] = [];
-		for (const line of this.help.loadFileLinesSync('Day13.txt')) {
+		for (const line of this.help.loadFileLinesSync('Day13Test.txt')) {
 			array.push(line.split(''));
 		}
 		let carts = this.findAllCarts(array);
 		array = this.sanitizeArray(array, carts);
 
+		let tick = 0;
 		while (true) {
 			let newCarts: Cart[] = [];
 			carts.forEach((cart) => {
@@ -803,12 +804,129 @@ class Day13 {
 			carts = newCarts;
 			const pt = this.checkForCollisions(carts);
 			if (pt !== null) {
-				return pt;
-				break;
+				console.log(tick);
+				console.log(carts);
+				this.printArray(carts, array);
+				//return pt;
+				//break;
 			}
-			// this.printArray(carts, array);
+			tick += 1;
+			this.printArray(carts, array);
+			if (tick > 30) {
+				return undefined;
+			}
 		}
 		return undefined;
+	}
+
+	part2() {
+
+	}
+}
+
+class Day16 {
+
+	help = new Helper();
+	private registers: number[] = new Array(4).fill(0);
+
+	addr(input: number[]): void {
+		const result = this.registers[input[1]] + this.registers[input[2]];
+		this.registers[input[3]] = result;
+	}
+
+	addi(input: number[]): void {
+		const result = this.registers[input[1]] + input[2];
+		this.registers[input[3]] = result;
+	}
+
+	mulr(input: number[]): void {
+		const result = this.registers[input[1]] * this.registers[input[2]];
+		this.registers[input[3]] = result;
+	}
+
+	muli(input: number[]): void {
+		const result = this.registers[input[1]] * input[2];
+		this.registers[input[3]] = result;
+	}
+
+	banr(input: number[]): void {
+		const result = this.registers[input[1]] & this.registers[input[2]];
+		this.registers[input[3]] = result;
+	}
+
+	bani(input: number[]): void {
+		const result = this.registers[input[1]] & input[2];
+		this.registers[input[3]] = result;
+	}
+
+	borr(input: number[]): void {
+		const result = this.registers[input[1]] | this.registers[input[2]];
+		this.registers[input[3]] = result;
+	}
+
+	bori(input: number[]): void {
+		const result = this.registers[input[1]] | input[2];
+		this.registers[input[3]] = result;
+	}
+
+	setr(input: number[]): void {
+		this.registers[input[3]] = this.registers[input[1]];
+	}
+
+	seti(input: number[]): void {
+		this.registers[input[3]] = input[1];
+	}
+
+	gtir(input: number[]): void {
+		if (input[1] > this.registers[input[2]]) {
+			this.registers[input[3]] = 1;
+		} else {
+			this.registers[input[3]] = 0;
+		}
+	}
+
+	gtri(input: number[]): void {
+		if (this.registers[input[1]] > input[2]) {
+			this.registers[input[3]] = 1;
+		} else {
+			this.registers[input[3]] = 0;
+		}
+	}
+
+	gtrr(input: number[]): void {
+		if (this.registers[input[1]] > this.registers[input[2]]) {
+			this.registers[input[3]] = 1;
+		} else {
+			this.registers[input[3]] = 0;
+		}
+	}
+
+	eqir(input: number[]): void {
+		if (input[1] === this.registers[input[2]]) {
+			this.registers[input[3]] = 1;
+		} else {
+			this.registers[input[3]] = 0;
+		}
+	}
+
+	eqri(input: number[]): void {
+		if (this.registers[input[1]] === input[2]) {
+			this.registers[input[3]] = 1;
+		} else {
+			this.registers[input[3]] = 0;
+		}
+	}
+
+	eqrr(input: number[]): void {
+		if (this.registers[input[1]] === this.registers[input[2]]) {
+			this.registers[input[3]] = 1;
+		} else {
+			this.registers[input[3]] = 0;
+		}
+	}
+
+	part1() {
+
 	}
 
 	part2() {
@@ -827,5 +945,6 @@ export {
 	Day6,
 	Day7,
 	Day10,
-	Day13
+	Day13,
+	Day16
 }
