@@ -926,7 +926,25 @@ class Day16 {
 	}
 
 	part1() {
+		const lineGenerator = this.help.loadFileSyncGenerator('Day16.txt');
+		let line = lineGenerator.next();
+		let breakCount = 0;
+		let before: number[] = [];
+		let after: number[] = [];
+		while (!line.done) {
+			const value = line.value;
+			if (value.length === 0) {
+				breakCount += 1;
+				if (breakCount >= 3) {
+					break;
+				}
+				line = lineGenerator.next();
+			} else {
+				
+			}
 
+			line = lineGenerator.next();
+		}
 	}
 
 	part2() {
