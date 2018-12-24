@@ -1,5 +1,5 @@
 import { Test, Helper } from './main'
-import { Day1, Day2, Day3, Day4, Day5, Day7, Day10, Day13 } from './main'
+import { Day1, Day2, Day3, Day4, Day5, Day7, Day10 } from './main'
 
 describe('Basic tests', () => {
 	it('Module is able to export basic class function', () => {
@@ -37,6 +37,18 @@ describe('Helper tests', () => {
 	});
 	it('parseIntWithSign returns NaN for non-numbers', () => {
 		expect(help.parseIntWithSign('blarg')).toBeNaN();
+	});
+	it('compareArrays works for equivalent arrays', () => {
+		expect(help.compareArrays([1, 2, 3], [1, 2, 3])).toBeTruthy();
+	});
+	it('compareArrays returns false for arrays of different types', () => {
+		expect(help.compareArrays([1, 2, 3], ['1', '2', '3'])).toBeFalsy();
+	});
+	it('compareArrays returns false for arrays of different lengths', () => {
+		expect(help.compareArrays([1, 2, 3], [1, 2, 3, 4])).toBeFalsy();
+	});
+	it('compareArrays returns true for empty arrays', () => {
+		expect(help.compareArrays([], [])).toBeTruthy();
 	});
 });
 
