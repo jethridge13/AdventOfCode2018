@@ -72,6 +72,28 @@ class Helper {
 			console.log(buffer);
 		}
 	}
+
+	compareArrays(a: any[], b: any[]): boolean {
+		if (a === b) {
+			return true;
+		}
+
+		if (a == null || b === null) {
+			return false;
+		}
+
+		if (a.length != b.length) {
+			return false;
+		}
+
+		for (let i = 0; i < a.length; i++) {
+			if (a[i] !== b[i]) {
+				return false;
+			}
+		}
+
+		return true;
+	}
 }
 
 class Day1 {
@@ -925,12 +947,32 @@ class Day16 {
 		}
 	}
 
+	parseArray(line: string): number[] {
+		const arrayString = line.slice(line.indexOf('[') + 1, line.length - 1);
+		return arrayString.split(', ').map(char => {
+			return Number(char);
+		});
+	}
+
+	countAllCommands(before: number[], after: number[], ins: number[]): number {
+		const initialRegisters = this.registers.slice();
+		let commandCount = 0;
+
+		this.registers = before.slice();
+		// TODO Run through all commands and check equivalence
+
+		this.registers = initialRegisters.slice();
+		return commandCount;
+	}
+
 	part1() {
 		const lineGenerator = this.help.loadFileSyncGenerator('Day16.txt');
 		let line = lineGenerator.next();
 		let breakCount = 0;
 		let before: number[] = [];
 		let after: number[] = [];
+		let ins: number[] = [];
+		let insCount = 0;
 		while (!line.done) {
 			const value = line.value;
 			if (value.length === 0) {
@@ -940,11 +982,24 @@ class Day16 {
 				}
 				line = lineGenerator.next();
 			} else {
-				
+				if (value.includes('Before')) {
+					before = this.parseArray(value);
+				} else if (value.includes('After')) {
+					after = this.parseArray(value);
+					if (this.countAllCommands(before, after, ins) >= 3) {
+						insCount += 1;
+					}
+				}
+				else {
+					ins = value.split(' ').map(char => {
+						return Number(char);
+					});
+				}
 			}
 
 			line = lineGenerator.next();
 		}
+		return insCount;
 	}
 
 	part2() {
